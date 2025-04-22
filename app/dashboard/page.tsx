@@ -1,8 +1,12 @@
-'use client';
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getAccessToken, usePrivy } from "@privy-io/react-auth";
+import {
+  getAccessToken,
+  usePrivy,
+  useSolanaWallets,
+} from "@privy-io/react-auth";
 import Head from "next/head";
 
 async function verifyToken() {
@@ -38,6 +42,7 @@ export default function DashboardPage() {
     linkDiscord,
     unlinkDiscord,
   } = usePrivy();
+  const { ready: walletsReady, wallets } = useSolanaWallets();
 
   useEffect(() => {
     if (ready && !authenticated) {
@@ -218,6 +223,16 @@ export default function DashboardPage() {
             <pre className="max-w-4xl bg-slate-700 text-slate-50 font-mono p-4 text-xs sm:text-sm rounded-md mt-2">
               {JSON.stringify(user, null, 2)}
             </pre>
+            {walletsReady && (
+              <>
+                <p className="mt-6 font-bold uppercase text-sm text-gray-600">
+                  Connected Wallets
+                </p>
+                <pre className="max-w-4xl bg-slate-700 text-slate-50 font-mono p-4 text-xs sm:text-sm rounded-md mt-2">
+                  {JSON.stringify(wallets, null, 2)}
+                </pre>
+              </>
+            )}
           </>
         ) : null}
       </main>
